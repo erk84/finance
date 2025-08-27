@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <meta name='color-scheme' content='only' />
+    <meta name='viewport' content='width=device-width, initial-scale=0.8' />
+    <link rel="manifest" href="/manifest.json">
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='apple-mobile-web-app-status-bar-style' content='black' />
+    <meta name='apple-mobile-web-app-title' content='Application Logs' />
+    <title>Application Logs</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 10px 0; 
+            font-size: 14px; 
+        }
+        
+        table th, table td { 
+            text-align: left; 
+            padding: 8px; 
+            border: 1px solid #333; 
+        }
+        
+        table th { 
+            background-color: #333; 
+            color: #e0e0e0; 
+        }
+        
+        table td { 
+            background-color: #1e1e1e; 
+        }
+        
+        .status-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            padding: 10px; 
+        }
+        
+        .status-card { 
+            padding: 15px; 
+            border: 1px solid #333; 
+            border-radius: 8px; 
+            background-color: #1e1e1e; 
+            text-align: center; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); 
+            color: #e0e0e0; 
+        }
+        
+        @media (max-width: 800px) { 
+            .status-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 10px; 
+            } 
+        }
+        
+        h2 {
+            font-size: 16px;
+        }
+        
+        .log-container {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-left: 3px solid #333;
+            background-color: #252525;
+        }
+        
+        .log-entry.error {
+            border-left-color: #ff4444;
+        }
+        
+        .log-entry.warning {
+            border-left-color: #ffaa00;
+        }
+        
+        .log-entry.info {
+            border-left-color: #4444ff;
+        }
+        
+        .log-entry.success {
+            border-left-color: #44ff44;
+        }
+        
+        .log-timestamp {
+            color: #888;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        
+        .log-level {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .log-level.error {
+            color: #ff4444;
+        }
+        
+        .log-level.warning {
+            color: #ffaa00;
+        }
+        
+        .log-level.info {
+            color: #4444ff;
+        }
+        
+        .log-level.success {
+            color: #44ff44;
+        }
+        
+        .log-message {
+            color: #e0e0e0;
+        }
+
+        /* Modern Hamburger Menu Styles - copied from dashboard */
+        .hamburger-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+            border-bottom: 1px solid #333;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e0e0e0;
+            text-decoration: none;
+        }
+
+        .hamburger-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger-toggle span {
+            width: 24px;
+            height: 2px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            transition: all 0.3s linear;
+            position: relative;
+            transform-origin: 1px;
+        }
+
+        .hamburger-toggle:hover span {
+            background: #febb0a;
+        }
+
+        .hamburger-toggle.open span:first-child {
+            transform: rotate(45deg);
+        }
+
+        .hamburger-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-toggle.open span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 64px;
+            right: -300px;
+            width: 280px;
+            height: calc(100vh - 64px);
+            background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            border-left: 1px solid #333;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-menu.open {
+            right: 0;
+        }
+
+        .nav-items {
+            list-style: none;
+            padding: 1rem 0;
+            margin: 0;
+        }
+
+        .nav-items li {
+            margin: 0;
+        }
+
+        .nav-link, .nav-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-button:hover {
+            background: rgba(254, 187, 10, 0.1);
+            border-left-color: #febb0a;
+            color: #febb0a;
+        }
+
+        .nav-link.active {
+            background: rgba(254, 187, 10, 0.15);
+            border-left-color: #febb0a;
+            color: #febb0a;
+        }
+
+        .nav-icon {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .nav-overlay.open {
+            display: block;
+        }
+
+        .main-content {
+            padding-top: 64px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                width: 100vw;
+                right: -100vw;
+            }
+            
+            .hamburger-nav {
+                padding: 0 0.75rem;
+            }
+            
+            .brand-text {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class='hamburger-nav' role='navigation' aria-label='Main navigation'>
+        <div class='nav-header'>
+            <div class='nav-brand'>
+                <span class='brand-text'>$$$</span>
+            </div>
+            <button class='hamburger-toggle' id='hamburger-toggle' aria-label='Toggle navigation menu'>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class='nav-menu' id='nav-menu'>
+            <ul class='nav-items'>
+                <li><a href='https://erk84.github.io/finance/' class='nav-link' title='Main dashboard'>
+                    <span class='nav-icon'>📊</span>Dashboard
+                </a></li>
+                <li><a href='https://erk84.github.io/finance/logs.html' class='nav-link active' title='View application logs'>
+                    <span class='nav-icon'>📋</span>Logs
+                </a></li>
+                <li><a href='/' class='nav-link' title='Day trading view'>
+                    <span class='nav-icon'>📈</span>Day Trade
+                </a></li>
+                <li><a href='/' class='nav-link' title='Return to main application'>
+                    <span class='nav-icon'>🏠</span>Back to App
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class='main-content'>
+        <h1>Application Logs</h1>
+        
+        <div class='status-grid'>
+            <div class='status-card'>
+                <h3>Total Log Entries</h3>
+                <p id='total-logs'>0</p>
+            </div>
+            <div class='status-card'>
+                <h3>Error Count</h3>
+                <p id='error-count'>0</p>
+            </div>
+            <div class='status-card'>
+                <h3>Warning Count</h3>
+                <p id='warning-count'>0</p>
+            </div>
+            <div class='status-card'>
+                <h3>Last Updated</h3>
+                <p id='last-updated'>-</p>
+            </div>
+        </div>
+
+        <div class='log-container'>
+            <h2>Recent Log Entries</h2>
+            <div id='log-entries'>
+                <!-- Log entries will be populated here -->
+                <div class='log-entry info'>
+                    <span class='log-timestamp'>2025-08-27 14:21:15</span>
+                    <span class='log-level info'>INFO</span>
+                    <span class='log-message'>Application started successfully</span>
+                </div>
+                <div class='log-entry success'>
+                    <span class='log-timestamp'>2025-08-27 14:21:16</span>
+                    <span class='log-level success'>SUCCESS</span>
+                    <span class='log-message'>Dashboard updated and uploaded to GitHub</span>
+                </div>
+                <div class='log-entry info'>
+                    <span class='log-timestamp'>2025-08-27 14:21:17</span>
+                    <span class='log-level info'>INFO</span>
+                    <span class='log-message'>Stock data processing completed</span>
+                </div>
+                <div class='log-entry warning'>
+                    <span class='log-timestamp'>2025-08-27 14:20:45</span>
+                    <span class='log-level warning'>WARNING</span>
+                    <span class='log-message'>Rate limit approaching for API endpoint</span>
+                </div>
+                <div class='log-entry error'>
+                    <span class='log-timestamp'>2025-08-27 14:19:32</span>
+                    <span class='log-level error'>ERROR</span>
+                    <span class='log-message'>Failed to fetch data for ticker EXAMPLE - connection timeout</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation menu functionality (copied from dashboard)
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerToggle = document.getElementById('hamburger-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            const body = document.body;
+            
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'nav-overlay';
+            overlay.id = 'nav-overlay';
+            body.appendChild(overlay);
+            
+            function toggleMenu() {
+                const isOpen = navMenu.classList.contains('open');
+                
+                if (isOpen) {
+                    navMenu.classList.remove('open');
+                    hamburgerToggle.classList.remove('open');
+                    overlay.classList.remove('open');
+                } else {
+                    navMenu.classList.add('open');
+                    hamburgerToggle.classList.add('open');
+                    overlay.classList.add('open');
+                }
+            }
+            
+            hamburgerToggle.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+            
+            // Close menu when clicking nav links (except buttons)
+            navMenu.addEventListener('click', function(e) {
+                if (e.target.classList.contains('nav-link')) {
+                    toggleMenu();
+                }
+            });
+            
+            // Handle keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navMenu.classList.contains('open')) {
+                    toggleMenu();
+                }
+            });
+
+            // Update log statistics
+            updateLogStats();
+        });
+
+        function updateLogStats() {
+            const logEntries = document.querySelectorAll('.log-entry');
+            const errorCount = document.querySelectorAll('.log-entry.error').length;
+            const warningCount = document.querySelectorAll('.log-entry.warning').length;
+            
+            document.getElementById('total-logs').textContent = logEntries.length;
+            document.getElementById('error-count').textContent = errorCount;
+            document.getElementById('warning-count').textContent = warningCount;
+            document.getElementById('last-updated').textContent = new Date().toLocaleString('sv-SE');
+        }
+    </script>
+</body>
+</html>
