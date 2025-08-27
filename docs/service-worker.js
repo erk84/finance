@@ -1,22 +1,19 @@
 
-				{
-					"name": "Status Dashboard",
-					"short_name": "Dashboard",
-					"id": "/",
-					"start_url": "/Dashboard",
-					"display": "standalone",
-					"background_color": "#121212",
-					"theme_color": "#1e1e1e",
-					"icons": [
-						{
-							"src": "/images/192.png",
-							"sizes": "192x192",
-							"type": "image/png"
-						},
-						{
-							"src": "/images/512.png",
-							"sizes": "512x512",
-							"type": "image/png"
-						}
-					]
-				}
+				self.addEventListener('push', event => {
+					const data = event.data ? event.data.json() : {};
+					const title = data.title || 'Ny notis';
+					const options = {
+						body: data.body || 'Du har en ny notis!',
+						icon: data.icon || '/icon.png',
+						data: data.url || '/'
+					};
+					event.waitUntil(
+						self.registration.showNotification(title, options)
+					);
+				});
+
+				self.addEventListener('notificationclick', event => {
+					event.notification.close();
+					event.waitUntil(clients.openWindow(event.notification.data));
+				});
+			
