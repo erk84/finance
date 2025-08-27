@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang='sv'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=0.8'>
+  <title>Logs</title>
+  <style>
+    :root { color-scheme: light dark; }
+/* Modern Hamburger Menu Styles */
+.hamburger-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-bottom: 1px solid #333;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #4f9cf9 0%, #7b68ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.hamburger-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    transition: all 0.3s ease;
+}
+
+.hamburger-toggle span {
+    width: 2rem;
+    height: 0.25rem;
+    background: #fff;
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    transform-origin: 1px;
+}
+
+.hamburger-toggle:hover span {
+    background: #4f9cf9;
+}
+
+.hamburger-toggle.open span:first-child {
+    transform: rotate(45deg);
+}
+
+.hamburger-toggle.open span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+.hamburger-toggle.open span:nth-child(3) {
+    transform: rotate(-45deg);
+}
+
+.nav-menu {
+    position: fixed;
+    top: 64px;
+    right: -300px;
+    width: 280px;
+    height: calc(100vh - 64px);
+    background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    border-left: 1px solid #333;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.nav-menu.open {
+    right: 0;
+}
+
+.nav-items {
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+}
+
+.nav-items li {
+    margin: 0;
+}
+
+.nav-link, .nav-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-link:hover, .nav-button:hover {
+    background: rgba(79, 156, 249, 0.1);
+    color: #4f9cf9;
+    border-left-color: #4f9cf9;
+}
+
+.nav-link.active {
+    background: rgba(79, 156, 249, 0.15);
+    color: #4f9cf9;
+    border-left-color: #4f9cf9;
+}
+
+.nav-icon {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* Body padding to account for fixed nav */
+body {
+    padding-top: 64px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu {
+        width: 100vw;
+        right: -100vw;
+    }
+    
+    .hamburger-nav {
+        padding: 0 0.75rem;
+    }
+    
+    .brand-text {
+        font-size: 1.25rem;
+    }
+}
+
+/* Overlay for mobile */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+    body { 
+      font-family: sans-serif; 
+      margin: 0; 
+      line-height: 1.4; 
+      background: #0b0f14;
+      color: #e9edf1;
+    }
+    .content {
+      padding: 2rem;
+      margin-top: 1rem;
+    }
+    h1 { 
+      font-size: 1.5rem; 
+      margin-bottom: .5rem; 
+      color: #e9edf1;
+    }
+    .meta { 
+      color: #7d8696; 
+      font-size: .9rem; 
+      margin-bottom: 1rem; 
+    }
+    ul { 
+      padding-left: 1.2rem; 
+      list-style: none; 
+      margin: 0; 
+    }
+    li { 
+      margin: .5rem 0; 
+    }
+    details > summary { 
+      cursor: pointer; 
+      font-size: 12px; 
+      color: #e9edf1;
+      padding: 0.5rem;
+      background: #121823;
+      border-radius: 4px;
+      margin-bottom: 0.25rem;
+    }
+    details > summary:hover {
+      background: #1f2a3a;
+    }
+    pre {
+      background: #121823;
+      color: #e9edf1;
+      padding: .75rem;
+      border-radius: .5rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: .5rem 0 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      border: 1px solid #1f2a3a;
+    }
+  </style>
+</head>
+<body>
+<nav class='hamburger-nav' role='navigation' aria-label='Main navigation'>
+    <div class='nav-header'>
+        <div class='nav-brand'>
+            <span class='brand-text'>$$$</span>
+        </div>
+        <button class='hamburger-toggle' id='hamburger-toggle' aria-label='Toggle navigation menu'>
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+    <div class='nav-menu' id='nav-menu'>
+        <ul class='nav-items'>
+            <li><a href='/Dashboard' class='nav-link' title='Main dashboard'>
+                <span class='nav-icon'>📊</span>Dashboard
+            </a></li>
+            <li><a href='/logs' class='nav-link active' title='View application logs'>
+                <span class='nav-icon'>📋</span>Logs
+            </a></li>
+            <li><a href='/DayTradeView' class='nav-link' title='Day trading view'>
+                <span class='nav-icon'>📈</span>Day Trade
+            </a></li>
+            <li><button type='button' onclick='callEndpoint("/manualstockse")' class='nav-button' title='Manually check Swedish stocks'>
+                <span class='nav-icon'>🇸🇪</span>Check SE Stocks
+            </button></li>
+            <li><button type='button' onclick='callEndpoint("/manualstockus")' class='nav-button' title='Manually check US stocks'>
+                <span class='nav-icon'>🇺🇸</span>Check US Stocks
+            </button></li>
+            <li><button type='button' onclick='callEndpoint("/manualfund")' class='nav-button' title='Manually check funds'>
+                <span class='nav-icon'>💼</span>Check Funds
+            </button></li>
+            <li><button type='button' onclick='window.location.href="/DashboardNoCache"' class='nav-button' title='Refresh dashboard with latest data'>
+                <span class='nav-icon'>🔄</span>Refresh
+            </button></li>
+        </ul>
+    </div>
+</nav>
+<div class='content'>
+  <h1>Logs:</h1>
+  <div class='meta'>Antal poster: 551  </div>
+  <ul>
+    <li><details><summary>2025-08-27 19:17:22 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 19:17:12 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:49 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:49 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:45 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:44 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:43 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:41 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:40 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:38 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:36 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:35 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:35 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:31 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:17 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:05 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:05 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:02 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:01 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:57:00 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:58 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:56 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:54 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:52 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:51 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:51 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:47 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:56:25 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:52 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:47 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:44 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:43 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:42 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:40 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:38 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:36 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:34 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:33 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:33 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:46:28 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:45 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:45 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:42 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:40 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:39 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:37 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:36 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:34 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:32 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:31 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:31 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:44:29 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:20 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:20 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:17 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:15 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:14 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:12 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:11 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:09 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:07 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:06 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:06 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:39:01 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:38:48 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:18 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:18 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:14 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:13 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:12 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:10 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:08 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:06 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:04 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:03 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:03 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:21:00 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:20:21 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:19:36 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:22 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:22 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:18 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:17 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:16 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:14 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:12 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:10 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:09 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:08 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:08 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:11:04 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:10:53 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:17 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:17 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:14 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:12 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:11 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:09 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:08 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:06 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:04 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:03 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:03 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:02:00 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:11 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:11 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:08 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:07 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:06 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:03 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:01 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:01:00 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:00:58 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:00:57 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:00:57 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:00:50 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 16:00:43 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:44 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:44 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:40 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:38 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:37 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:36 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:33 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:32 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:30 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:28 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:28 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:20 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:51:10 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:47 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:47 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:43 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:42 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:41 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:39 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:37 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:35 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:33 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:32 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:32 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:26 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:48:16 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:42 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:42 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:38 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:37 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:36 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:34 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:32 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:31 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:29 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:28 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:28 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:24 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:46:04 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:51 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:46 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:43 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:42 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:41 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:39 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:37 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:35 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:33 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:32 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:32 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:40:19 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:39:13 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:32:57 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:31:14 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:31:10 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:42 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:37 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:37 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:36 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:35 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:34 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:33 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:32 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:29 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:19 - GitHub upload - Failed to upload dashboard. Status: Conflict, Error: {&quot;message&quot;:&quot;Repository rule violations found\n\nSecret detected in content\n\n&quot;,&quot;metadata&quot;:{&quot;secret_scanning&quot;:{&quot;bypass_placeholders&quot;:[{&quot;placeholder_id&quot;:&quot;31s8S0p1doHXesP0HLEXDvjHdkc&quot;,&quot;token_type&quot;:&quot;VOLCENGINE_ACCESS_KEY_ID&quot;}]}},&quot;documentation_url&quot;:&quot;https://docs.github.com/rest/repos/contents#create-or-update-file-contents&quot;,&quot;status&quot;:&quot;409&quot;}</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:16 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:16 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:16 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:15 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:15 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:14 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:13 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:12 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:12 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:30:07 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:39 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:39 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:36 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:36 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:36 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:35 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:34 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:34 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:33 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:32 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:32 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:26:29 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:30 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:30 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:26 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:26 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:26 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:25 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:24 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:23 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:22 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:21 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:21 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:23:18 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:22:42 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:14 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:14 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:11 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:10 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:10 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:09 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:08 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:08 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:07 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:06 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:06 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:07:02 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:06:33 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:07 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:07 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:04 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:04 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:04 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:03 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:02 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:01 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:01 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:00 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:02:00 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:01:56 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 15:01:35 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:33 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:33 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:30 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:30 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:30 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:29 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:28 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:27 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:26 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:25 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:25 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:20 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:57:07 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:41 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:41 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:38 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:38 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:38 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:37 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:36 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:35 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:35 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:34 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:34 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:28 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:48:17 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:47:02 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:47:02 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:59 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:59 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:59 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:58 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:57 - GitHub upload - favicon.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:57 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:56 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:55 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:55 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:51 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:46:37 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:40:00 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:57 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:57 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:57 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:56 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:55 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:53 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:52 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:52 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:47 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:39:19 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:35 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:35 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:32 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:32 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:32 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:31 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:30 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:29 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:28 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:28 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:25 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:34:01 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:45 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:45 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:42 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:42 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:42 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:41 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:40 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:39 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:38 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:38 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:34 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:29:20 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:28:02 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:21:02 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:21:02 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:59 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:59 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:59 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:58 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:57 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:56 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:55 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:55 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:52 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:20:38 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:37 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:37 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:34 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:34 - GitHub upload - All supporting files uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:34 - GitHub upload - 512.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:33 - GitHub upload - 192.png uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:32 - GitHub upload - service-worker.js uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:31 - GitHub upload - manifest.json uploaded successfully</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:30 - GitHub upload - Starting upload of supporting files</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:30 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:25 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 14:13:17 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:52:43 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:41:53 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:41:50 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:41:47 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:41:46 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:41:29 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:41:16 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:33:41 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:33:41 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:33:38 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:33:37 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:33:31 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:33:18 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:30:02 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:30:00 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:29:56 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:29:56 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:29:49 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:29:29 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:27:41 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:27:40 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:27:37 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:27:36 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:27:26 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:27:14 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:21:28 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:21:24 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:21:24 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:20:48 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 13:20:22 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:52:24 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:52:21 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:52:18 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:52:18 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:52:10 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:51:46 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:47:35 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:47:32 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:47:29 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:47:29 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:47:18 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:47:06 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:32:44 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:32:44 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:32:41 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:32:40 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:32:35 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 12:32:20 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:16:53 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:16:51 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:16:49 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:16:48 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:16:47 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:16:08 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:15:59 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:03:49 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:03:45 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:03:43 - GitHub upload - Encrypting HTML content</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:03:42 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:03:36 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:03:24 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:02:38 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 11:02:13 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 09:09:58 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 09:09:58 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 09:09:55 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 09:09:51 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 09:09:41 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:22:15 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:22:15 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:22:10 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:22:02 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:22:02 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:21:35 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:20:02 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:20:01 - GitHub upload - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:19:49 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:19:46 - GitHub upload - Starting upload of dashboard to GitHub</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:19:32 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:19:24 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:19:14 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-27 08:18:56 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 16:02:53 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 16:00:48 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:41:11 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:40:40 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:40:02 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:35:22 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:26:10 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:24:27 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:14:19 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:11:54 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:09:30 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:07:21 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:03:26 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 15:01:03 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:45:10 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:37:38 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:36:16 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:35:05 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:33:16 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:30:30 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:29:58 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:24:39 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:23:40 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:22:57 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:20:23 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 14:15:43 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Nelly Group has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Clas Ohlson B has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - SAAB B has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Lundin Gold has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - RaySearch Laboratories B has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Saniona has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - INVISIO has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Fortnox has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Truecaller has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - MilDef Group has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - RaySearch Laboratories B has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Saniona has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Nelly Group has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - Clas Ohlson B has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:41 - NewsDashboardLogic.GetOngoingStocksForContext - SAAB B has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:40 - NewsDashboardLogic.GetOngoingStocksForContext - Lundin Gold has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:40 - NewsDashboardLogic.GetOngoingStocksForContext - INVISIO has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:40 - NewsDashboardLogic.GetOngoingStocksForContext - Fortnox has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:40 - NewsDashboardLogic.GetOngoingStocksForContext - Truecaller has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:40 - NewsDashboardLogic.GetOngoingStocksForContext - MilDef Group has no buyprice any longer fetching data again...</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 12:18:28 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-26 09:59:10 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:34:04 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:33:50 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:32:58 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:32:24 - Executing StockService.RefreshSymbolDays - refreshSwedish: False, refreshUS: True</summary><pre>&#xD;&#xA;Number of US to refresh: 251&#xD;&#xA;1/251 - 3M, last date: 2025-08-25&#xD;&#xA;2/251 - Abbott Laboratories, last date: 2025-08-25&#xD;&#xA;3/251 - AbbVie, last date: 2025-08-25&#xD;&#xA;4/251 - AbCellera Biologics, last date: 2025-08-25&#xD;&#xA;5/251 - Adobe, last date: 2025-08-25&#xD;&#xA;6/251 - Advanced Micro Devices, last date: 2025-08-25&#xD;&#xA;7/251 - Airbnb A, last date: 2025-08-25&#xD;&#xA;8/251 - Albemarle, last date: 2025-08-25&#xD;&#xA;9/251 - Alibaba Group ADR, last date: 2025-08-25&#xD;&#xA;10/251 - Alphabet Inc Class A, last date: 2025-08-25&#xD;&#xA;11/251 - Altria Group, last date: 2025-08-25&#xD;&#xA;12/251 - Amazon.com, last date: 2025-08-25&#xD;&#xA;13/251 - AMC Entertainment A, last date: 2025-08-25&#xD;&#xA;14/251 - American States Water, last date: 2025-08-25&#xD;&#xA;15/251 - American Tower REIT, last date: 2025-08-25&#xD;&#xA;16/251 - Amgen, last date: 2025-08-25&#xD;&#xA;17/251 - Apple, last date: 2025-08-25&#xD;&#xA;18/251 - Applied Materials, last date: 2025-08-25&#xD;&#xA;19/251 - Arcadium Lithium, last date: no days&#xD;&#xA;20/251 - Archer Aviation A, last date: 2025-08-25&#xD;&#xA;21/251 - Archer Daniels Midland, last date: 2025-08-25&#xD;&#xA;22/251 - Arista Networks, last date: 2025-08-25&#xD;&#xA;23/251 - Arm Holdings ADR, last date: 2025-08-25&#xD;&#xA;24/251 - ASML Holding, last date: 2025-08-25&#xD;&#xA;25/251 - AST SpaceMobile A, last date: 2025-08-25&#xD;&#xA;26/251 - AstraZeneca ADR, last date: 2025-08-25&#xD;&#xA;27/251 - AT&amp;T, last date: 2025-08-25&#xD;&#xA;28/251 - Atlassian A, last date: 2025-08-25&#xD;&#xA;29/251 - Aurora Cannabis, last date: 2025-08-25&#xD;&#xA;30/251 - Baidu ADR, last date: 2025-08-25&#xD;&#xA;31/251 - Ballard Power Systems, last date: 2025-08-25&#xD;&#xA;32/251 - Barrick Gold, last date: 2025-08-25&#xD;&#xA;33/251 - Beyond Meat, last date: 2025-08-25&#xD;&#xA;34/251 - BHP Group ADR, last date: 2025-08-25&#xD;&#xA;35/251 - BioNTech ADR, last date: 2025-08-25&#xD;&#xA;36/251 - BlackBerry, last date: 2025-08-25&#xD;&#xA;37/251 - Blink Charging, last date: 2025-08-25&#xD;&#xA;38/251 - Boeing, last date: 2025-08-25&#xD;&#xA;39/251 - Booking, last date: 2025-08-25&#xD;&#xA;40/251 - BP Plc, last date: 2025-08-25&#xD;&#xA;41/251 - Bristol-Myers Squibb, last date: 2025-08-25&#xD;&#xA;42/251 - British American Tobacco ADR, last date: 2025-08-25&#xD;&#xA;43/251 - Broadcom, last date: 2025-08-25&#xD;&#xA;44/251 - Brookfield Renewable A, last date: 2025-08-25&#xD;&#xA;45/251 - C3.ai, last date: 2025-08-25&#xD;&#xA;46/251 - Cameco, last date: 2025-08-25&#xD;&#xA;47/251 - Canadian Solar, last date: 2025-08-25&#xD;&#xA;48/251 - Canopy Growth, last date: 2025-08-25&#xD;&#xA;49/251 - Carnival, last date: 2025-08-25&#xD;&#xA;50/251 - Carrier Global, last date: 2025-08-25&#xD;&#xA;51/251 - Caterpillar, last date: 2025-08-25&#xD;&#xA;52/251 - Celsius, last date: 2025-08-25&#xD;&#xA;53/251 - ChargePoint, last date: 2025-08-25&#xD;&#xA;54/251 - Chevron, last date: 2025-08-25&#xD;&#xA;55/251 - Cisco Systems, last date: 2025-08-25&#xD;&#xA;56/251 - CleanSpark, last date: 2025-08-25&#xD;&#xA;57/251 - Cloudflare, last date: 2025-08-25&#xD;&#xA;58/251 - Clover Health Investments A, last date: 2025-08-25&#xD;&#xA;59/251 - Coca-Cola, last date: 2025-08-25&#xD;&#xA;60/251 - Colgate-Palmolive, last date: 2025-08-25&#xD;&#xA;61/251 - COMPASS Pathways ADR, last date: 2025-08-25&#xD;&#xA;62/251 - Contextlogic A, last date: no days&#xD;&#xA;63/251 - Corsair Gaming, last date: 2025-08-25&#xD;&#xA;64/251 - Costco Wholesale, last date: 2025-08-25&#xD;&#xA;65/251 - Coupang A, last date: 2025-08-25&#xD;&#xA;66/251 - CRISPR Therapeutics, last date: 2025-08-25&#xD;&#xA;67/251 - CrowdStrike A, last date: 2025-08-25&#xD;&#xA;68/251 - D-Wave Quantum, last date: 2025-08-25&#xD;&#xA;69/251 - Danaher, last date: 2025-08-25&#xD;&#xA;70/251 - DAQO New Energy ADR, last date: 2025-08-25&#xD;&#xA;71/251 - Datadog A, last date: 2025-08-25&#xD;&#xA;72/251 - Deere &amp; Co., last date: 2025-08-25&#xD;&#xA;73/251 - Dell Technologies C, last date: 2025-08-25&#xD;&#xA;74/251 - Denison Mines, last date: 2025-08-25&#xD;&#xA;75/251 - DocuSign, last date: 2025-08-25&#xD;&#xA;76/251 - Dover, last date: 2025-08-25&#xD;&#xA;77/251 - DraftKings A, last date: 2025-08-25&#xD;&#xA;78/251 - Eco Wave Power Global ADR, last date: 2025-08-25&#xD;&#xA;79/251 - Edwards Lifesciences, last date: 2025-08-25&#xD;&#xA;80/251 - EHang ADR, last date: 2025-08-25&#xD;&#xA;81/251 - Electronic Arts, last date: 2025-08-25&#xD;&#xA;82/251 - Eli Lilly, last date: 2025-08-25&#xD;&#xA;83/251 - Energy Fuels, last date: 2025-08-25&#xD;&#xA;84/251 - Enovix, last date: 2025-08-25&#xD;&#xA;85/251 - Enphase Energy, last date: 2025-08-25&#xD;&#xA;86/251 - EOG Resources, last date: 2025-08-25&#xD;&#xA;87/251 - Estee Lauder Companies, last date: 2025-08-25&#xD;&#xA;88/251 - Expedia, last date: 2025-08-25&#xD;&#xA;89/251 - Exxon Mobil, last date: 2025-08-25&#xD;&#xA;90/251 - Faraday Future Intelligent Electric, last date: 2025-08-25&#xD;&#xA;91/251 - Ferrari N.V, last date: 2025-08-25&#xD;&#xA;92/251 - First Majestic Silver, last date: 2025-08-25&#xD;&#xA;93/251 - First Solar, last date: 2025-08-25&#xD;&#xA;94/251 - Ford Motor, last date: 2025-08-25&#xD;&#xA;95/251 - Fortinet, last date: 2025-08-25&#xD;&#xA;96/251 - Freeport-McMoRan, last date: 2025-08-25&#xD;&#xA;97/251 - FREYR Battery, last date: 2025-08-25&#xD;&#xA;98/251 - GameStop, last date: 2025-08-25&#xD;&#xA;99/251 - Garmin, last date: 2025-08-25&#xD;&#xA;100/251 - GE Aerospace, last date: 2025-08-25&#xD;&#xA;101/251 - GE Vernova, last date: 2025-08-25&#xD;&#xA;102/251 - General Dynamics, last date: 2025-08-25&#xD;&#xA;103/251 - General Motors, last date: 2025-08-25&#xD;&#xA;104/251 - Gevo, last date: 2025-08-25&#xD;&#xA;105/251 - Gilead Sciences, last date: 2025-08-25&#xD;&#xA;106/251 - GSK ADR, last date: 2025-08-25&#xD;&#xA;107/251 - HCA Healthcare, last date: 2025-08-25&#xD;&#xA;108/251 - Hecla Mining, last date: 2025-08-25&#xD;&#xA;109/251 - Hims &amp; Hers Health A, last date: 2025-08-25&#xD;&#xA;110/251 - Home Depot, last date: 2025-08-25&#xD;&#xA;111/251 - Hycroft Mining A, last date: 2025-08-25&#xD;&#xA;112/251 - IBM, last date: 2025-08-25&#xD;&#xA;113/251 - Intel, last date: 2025-08-25&#xD;&#xA;114/251 - Intuit, last date: 2025-08-25&#xD;&#xA;115/251 - Intuitive Machines, last date: 2025-08-25&#xD;&#xA;116/251 - Intuitive Surgical, last date: 2025-08-25&#xD;&#xA;117/251 - IonQ, last date: 2025-08-25&#xD;&#xA;118/251 - Iron Mountain REIT, last date: 2025-08-25&#xD;&#xA;119/251 - JD.com ADR, last date: 2025-08-25&#xD;&#xA;120/251 - Joby Aviation, last date: 2025-08-25&#xD;&#xA;121/251 - Johnson &amp; Johnson, last date: 2025-08-25&#xD;&#xA;122/251 - KLA, last date: 2025-08-25&#xD;&#xA;123/251 - Kraft Heinz, last date: 2025-08-25&#xD;&#xA;124/251 - Lam Research, last date: 2025-08-25&#xD;&#xA;125/251 - Li Auto ADR, last date: 2025-08-25&#xD;&#xA;126/251 - Lithium Americas, last date: 2025-08-25&#xD;&#xA;127/251 - Lockheed Martin, last date: 2025-08-25&#xD;&#xA;128/251 - Lucid Group, last date: 2025-08-25&#xD;&#xA;129/251 - Manchester United A, last date: 2025-08-25&#xD;&#xA;130/251 - Marvell Technology, last date: 2025-08-25&#xD;&#xA;131/251 - Match Group, last date: 2025-08-25&#xD;&#xA;132/251 - Matterport A, last date: no days&#xD;&#xA;133/251 - McDonald&#x27;s, last date: 2025-08-25&#xD;&#xA;134/251 - Medtronic, last date: 2025-08-25&#xD;&#xA;135/251 - MercadoLibre, last date: 2025-08-25&#xD;&#xA;136/251 - Merck &amp; Co, last date: 2025-08-25&#xD;&#xA;137/251 - Meta Platforms A, last date: 2025-08-25&#xD;&#xA;138/251 - MGM Resorts Intl, last date: 2025-08-25&#xD;&#xA;139/251 - MicroCloud Hologram, last date: 2025-08-25&#xD;&#xA;140/251 - Micron Technology, last date: 2025-08-25&#xD;&#xA;141/251 - Microsoft, last date: 2025-08-25&#xD;&#xA;142/251 - MicroStrategy A, last date: 2025-08-25&#xD;&#xA;143/251 - MicroVision, last date: 2025-08-25&#xD;&#xA;144/251 - MindMed, last date: 2025-08-25&#xD;&#xA;145/251 - Moderna, last date: 2025-08-25&#xD;&#xA;146/251 - Mondelez International A, last date: 2025-08-25&#xD;&#xA;147/251 - Monster Beverage, last date: 2025-08-25&#xD;&#xA;148/251 - MP Materials, last date: 2025-08-25&#xD;&#xA;149/251 - Nano Dimension ADR, last date: 2025-08-25&#xD;&#xA;150/251 - Neonode, last date: 2025-08-25&#xD;&#xA;151/251 - Netflix, last date: 2025-08-25&#xD;&#xA;152/251 - Newmont, last date: 2025-08-25&#xD;&#xA;153/251 - NextEra Energy, last date: 2025-08-25&#xD;&#xA;154/251 - Nike, last date: 2025-08-25&#xD;&#xA;155/251 - Nikola, last date: no days&#xD;&#xA;156/251 - NIO ADR A, last date: 2025-08-25&#xD;&#xA;157/251 - Nokia ADR, last date: 2025-08-25&#xD;&#xA;158/251 - Norfolk Southern, last date: 2025-08-25&#xD;&#xA;159/251 - Northrop Grumman, last date: 2025-08-25&#xD;&#xA;160/251 - Norwegian Cruise Line, last date: 2025-08-25&#xD;&#xA;161/251 - Novartis ADR, last date: 2025-08-25&#xD;&#xA;162/251 - Novavax, last date: 2025-08-25&#xD;&#xA;163/251 - Novo Nordisk ADR, last date: 2025-08-25&#xD;&#xA;164/251 - NuScale Power, last date: 2025-08-25&#xD;&#xA;165/251 - NVIDIA, last date: 2025-08-25&#xD;&#xA;166/251 - NXP Semiconductors, last date: 2025-08-25&#xD;&#xA;167/251 - Oatly Group AB, last date: 2025-08-25&#xD;&#xA;168/251 - Occidental Petroleum, last date: 2025-08-25&#xD;&#xA;169/251 - Oklo A, last date: 2025-08-25&#xD;&#xA;170/251 - Okta A, last date: 2025-08-25&#xD;&#xA;171/251 - ONEOK, last date: 2025-08-25&#xD;&#xA;172/251 - Oracle, last date: 2025-08-25&#xD;&#xA;173/251 - Palantir Technologies, last date: 2025-08-25&#xD;&#xA;174/251 - Palo Alto Networks, last date: 2025-08-25&#xD;&#xA;175/251 - Pan American Silver, last date: 2025-08-25&#xD;&#xA;176/251 - Parker-Hannifin, last date: 2025-08-25&#xD;&#xA;177/251 - PepsiCo, last date: 2025-08-25&#xD;&#xA;178/251 - Pfizer, last date: 2025-08-25&#xD;&#xA;179/251 - Philip Morris, last date: 2025-08-25&#xD;&#xA;180/251 - Pinterest A, last date: 2025-08-25&#xD;&#xA;181/251 - Plug Power, last date: 2025-08-25&#xD;&#xA;182/251 - Polestar ADR, last date: 2025-08-25&#xD;&#xA;183/251 - Procter &amp; Gamble, last date: 2025-08-25&#xD;&#xA;184/251 - QUALCOMM, last date: 2025-08-25&#xD;&#xA;185/251 - Quantum Computing, last date: 2025-08-25&#xD;&#xA;186/251 - QuantumScape A, last date: 2025-08-25&#xD;&#xA;187/251 - Reddit, last date: 2025-08-25&#xD;&#xA;188/251 - Rigetti Computing, last date: 2025-08-25&#xD;&#xA;189/251 - Rio Tinto ADR, last date: 2025-08-25&#xD;&#xA;190/251 - Rivian Automotive A, last date: 2025-08-25&#xD;&#xA;191/251 - Roblox A, last date: 2025-08-25&#xD;&#xA;192/251 - Rocket Lab USA, last date: 2025-08-25&#xD;&#xA;193/251 - Roku A, last date: 2025-08-25&#xD;&#xA;194/251 - Royal Caribbean Cruises, last date: 2025-08-25&#xD;&#xA;195/251 - RTX, last date: 2025-08-25&#xD;&#xA;196/251 - Rush Street Interactive A, last date: 2025-08-25&#xD;&#xA;197/251 - Salesforce, last date: 2025-08-25&#xD;&#xA;198/251 - Sea ADR A, last date: 2025-08-25&#xD;&#xA;199/251 - Serve Robotics, last date: 2025-08-25&#xD;&#xA;200/251 - ServiceNow, last date: 2025-08-25&#xD;&#xA;201/251 - Shopify, last date: 2025-08-25&#xD;&#xA;202/251 - Sibanye-Stillwater ADR, last date: 2025-08-25&#xD;&#xA;203/251 - Snap A, last date: 2025-08-25&#xD;&#xA;204/251 - Snowflake A, last date: 2025-08-25&#xD;&#xA;205/251 - SolarEdge Technologies, last date: 2025-08-25&#xD;&#xA;206/251 - Solventum, last date: 2025-08-25&#xD;&#xA;207/251 - Sonos, last date: 2025-08-25&#xD;&#xA;208/251 - Sony ADR, last date: 2025-08-25&#xD;&#xA;209/251 - SoundHound AI, last date: 2025-08-25&#xD;&#xA;210/251 - Spotify, last date: 2025-08-25&#xD;&#xA;211/251 - Starbucks, last date: 2025-08-25&#xD;&#xA;212/251 - Stryker, last date: 2025-08-25&#xD;&#xA;213/251 - Sundial Growers, last date: 2025-08-25&#xD;&#xA;214/251 - Sunnova Energy International, last date: no days&#xD;&#xA;215/251 - Sunrun, last date: 2025-08-25&#xD;&#xA;216/251 - Super Micro Computer, last date: 2025-08-25&#xD;&#xA;217/251 - Synopsys, last date: 2025-08-25&#xD;&#xA;218/251 - Taiwan Semicond Mfg Co, last date: 2025-08-25&#xD;&#xA;219/251 - Take-Two Interactive Software, last date: 2025-08-25&#xD;&#xA;220/251 - Target, last date: 2025-08-25&#xD;&#xA;221/251 - Teladoc Health, last date: 2025-08-25&#xD;&#xA;222/251 - TeraWulf, last date: 2025-08-25&#xD;&#xA;223/251 - Tesla, last date: 2025-08-25&#xD;&#xA;224/251 - Texas Instruments, last date: 2025-08-25&#xD;&#xA;225/251 - Thermo Fisher Scientific, last date: 2025-08-25&#xD;&#xA;226/251 - Tilray Brands, last date: 2025-08-25&#xD;&#xA;227/251 - Toyota Motor ADR, last date: 2025-08-25&#xD;&#xA;228/251 - Trump Media &amp; Technology Group, last date: 2025-08-25&#xD;&#xA;229/251 - Twilio A, last date: 2025-08-25&#xD;&#xA;230/251 - UiPath A, last date: 2025-08-25&#xD;&#xA;231/251 - Unilever, last date: 2025-08-25&#xD;&#xA;232/251 - UnitedHealth Group, last date: 2025-08-25&#xD;&#xA;233/251 - Unity Software, last date: 2025-08-25&#xD;&#xA;234/251 - Uranium Energy, last date: 2025-08-25&#xD;&#xA;235/251 - Vale ADR, last date: 2025-08-25&#xD;&#xA;236/251 - Verizon Communications, last date: 2025-08-25&#xD;&#xA;237/251 - Vertiv Holdings A, last date: 2025-08-25&#xD;&#xA;238/251 - Viatris, last date: 2025-08-25&#xD;&#xA;239/251 - Viking Therapeutics, last date: 2025-08-25&#xD;&#xA;240/251 - Virgin Galactic, last date: 2025-08-25&#xD;&#xA;241/251 - Walgreens Boots Alliance, last date: 2025-08-25&#xD;&#xA;242/251 - Walmart, last date: 2025-08-25&#xD;&#xA;243/251 - Walt Disney, last date: 2025-08-25&#xD;&#xA;244/251 - Warner Bros. Discovery A, last date: 2025-08-25&#xD;&#xA;245/251 - Waste Management, last date: 2025-08-25&#xD;&#xA;246/251 - XPEL, last date: 2025-08-25&#xD;&#xA;247/251 - XPeng A ADR, last date: 2025-08-25&#xD;&#xA;248/251 - Xylem, last date: 2025-08-25&#xD;&#xA;249/251 - ZIM, last date: 2025-08-25&#xD;&#xA;250/251 - Zomedica, last date: no days&#xD;&#xA;251/251 - Zscaler, last date: 2025-08-25</pre></details></li>
+    <li><details><summary>2025-08-25 21:32:24 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:32:24 - Running StockService.RefreshUSManual</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:32:07 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:31:45 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 21:08:03 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:33:59 - Executing StockService.RefreshSymbolDays - refreshSwedish: False, refreshUS: True</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:33:57 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:33:57 - Running StockService.RefreshUSManual</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:33:21 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:31:57 - Executing StockService.RefreshSymbolDays - refreshSwedish: False, refreshUS: True</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:31:54 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:31:54 - Running StockService.RefreshUSManual</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:29:34 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:25:29 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 20:00:18 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 19:35:59 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 19:35:15 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 18:55:27 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 16:38:47 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 16:35:24 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 16:34:19 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 16:00:41 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:59:39 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:46:27 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:46:10 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:45:30 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:45:15 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:44:35 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:17:03 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:01:12 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-25 15:00:48 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:17:08 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:17:00 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:16:51 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:14:43 - Running StockService.RefreshSwedishManual - Completed!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:14:41 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:13:42 - Executing StockService.RefreshSymbolDays - refreshSwedish: True, refreshUS: False</summary><pre>&#xD;&#xA;Number of Swedish to refresh: 219&#xD;&#xA;1/219 - AAK, last date: 2025-08-22&#xD;&#xA;2/219 - ABB, last date: 2025-08-22&#xD;&#xA;3/219 - AcadeMedia, last date: 2025-08-22&#xD;&#xA;4/219 - AddLife B, last date: 2025-08-22&#xD;&#xA;5/219 - Addnode Group B, last date: 2025-08-22&#xD;&#xA;6/219 - Addtech B, last date: 2025-08-22&#xD;&#xA;7/219 - Africa Oil Corp., last date: 2025-08-22&#xD;&#xA;8/219 - AFRY, last date: 2025-08-22&#xD;&#xA;9/219 - Alfa Laval, last date: 2025-08-22&#xD;&#xA;10/219 - Alimak Group, last date: 2025-08-22&#xD;&#xA;11/219 - Alleima, last date: 2025-08-22&#xD;&#xA;12/219 - Alligo B, last date: 2025-08-22&#xD;&#xA;13/219 - Ambea, last date: 2025-08-22&#xD;&#xA;14/219 - AQ Group, last date: 2025-08-22&#xD;&#xA;15/219 - Arctic Paper, last date: 2025-08-22&#xD;&#xA;16/219 - Arise, last date: 2025-08-22&#xD;&#xA;17/219 - Arjo, last date: 2025-08-22&#xD;&#xA;18/219 - Arla Plast, last date: 2025-08-22&#xD;&#xA;19/219 - Assa Abloy B, last date: 2025-08-22&#xD;&#xA;20/219 - AstraZeneca, last date: 2025-08-22&#xD;&#xA;21/219 - Atlas Copco B, last date: 2025-08-22&#xD;&#xA;22/219 - Attendo, last date: 2025-08-22&#xD;&#xA;23/219 - Autoliv SDB, last date: 2025-08-22&#xD;&#xA;24/219 - Axfood, last date: 2025-08-22&#xD;&#xA;25/219 - B3 Consulting Group, last date: 2025-08-22&#xD;&#xA;26/219 - Bactiguard Holding B, last date: 2025-08-22&#xD;&#xA;27/219 - Balco Group, last date: 2025-08-22&#xD;&#xA;28/219 - Beijer Alma B, last date: 2025-08-22&#xD;&#xA;29/219 - Beijer Ref B, last date: 2025-08-22&#xD;&#xA;30/219 - Bergman &amp; Beving B, last date: 2025-08-22&#xD;&#xA;31/219 - Berner Industrier B, last date: 2025-08-22&#xD;&#xA;32/219 - Betsson B, last date: 2025-08-22&#xD;&#xA;33/219 - Better Collective, last date: 2025-08-22&#xD;&#xA;34/219 - BICO Group, last date: 2025-08-22&#xD;&#xA;35/219 - Bilia A, last date: 2025-08-22&#xD;&#xA;36/219 - Billerud, last date: 2025-08-22&#xD;&#xA;37/219 - BioArctic B, last date: 2025-08-22&#xD;&#xA;38/219 - BioGaia B, last date: 2025-08-22&#xD;&#xA;39/219 - BioInvent International, last date: 2025-08-22&#xD;&#xA;40/219 - Biotage, last date: no days&#xD;&#xA;41/219 - Bj&#xF6;rn Borg, last date: 2025-08-22&#xD;&#xA;42/219 - Boliden, last date: 2025-08-22&#xD;&#xA;43/219 - BONESUPPORT, last date: 2025-08-22&#xD;&#xA;44/219 - Boozt, last date: 2025-08-22&#xD;&#xA;45/219 - Bufab, last date: 2025-08-22&#xD;&#xA;46/219 - Bulten, last date: 2025-08-22&#xD;&#xA;47/219 - Byggmax Group, last date: 2025-08-22&#xD;&#xA;48/219 - C-RAD B, last date: 2025-08-22&#xD;&#xA;49/219 - Camurus, last date: 2025-08-22&#xD;&#xA;50/219 - Cavotec SA, last date: no days&#xD;&#xA;51/219 - CellaVision, last date: 2025-08-22&#xD;&#xA;52/219 - Cinclus Pharma, last date: 2025-08-22&#xD;&#xA;53/219 - Cint Group, last date: 2025-08-22&#xD;&#xA;54/219 - Clas Ohlson B, last date: 2025-08-22&#xD;&#xA;55/219 - Cloetta, last date: 2025-08-22&#xD;&#xA;56/219 - CTEK, last date: 2025-08-22&#xD;&#xA;57/219 - CTT Systems, last date: 2025-08-22&#xD;&#xA;58/219 - Dedicare B, last date: 2025-08-22&#xD;&#xA;59/219 - Dometic Group, last date: 2025-08-22&#xD;&#xA;60/219 - Doro, last date: 2025-08-22&#xD;&#xA;61/219 - Duni, last date: 2025-08-22&#xD;&#xA;62/219 - Duroc B, last date: 2025-08-22&#xD;&#xA;63/219 - Dustin Group, last date: 2025-08-22&#xD;&#xA;64/219 - Dynavox Group, last date: 2025-08-22&#xD;&#xA;65/219 - Egetis Therapeutics, last date: 2025-08-22&#xD;&#xA;66/219 - Elanders B, last date: 2025-08-22&#xD;&#xA;67/219 - Electrolux B, last date: 2025-08-22&#xD;&#xA;68/219 - Electrolux Professional B, last date: 2025-08-22&#xD;&#xA;69/219 - Elekta B, last date: 2025-08-22&#xD;&#xA;70/219 - Eltel, last date: 2025-08-22&#xD;&#xA;71/219 - Embracer Group B, last date: 2025-08-22&#xD;&#xA;72/219 - Enad Global 7, last date: 2025-08-22&#xD;&#xA;73/219 - Enea, last date: 2025-08-22&#xD;&#xA;74/219 - engcon B, last date: 2025-08-22&#xD;&#xA;75/219 - Eolus Vind B, last date: 2025-08-22&#xD;&#xA;76/219 - Ependion, last date: 2025-08-22&#xD;&#xA;77/219 - Epiroc B, last date: 2025-08-22&#xD;&#xA;78/219 - EQL Pharma, last date: 2025-08-22&#xD;&#xA;79/219 - Ericsson B, last date: 2025-08-22&#xD;&#xA;80/219 - Essity B, last date: 2025-08-22&#xD;&#xA;81/219 - Evolution, last date: 2025-08-22&#xD;&#xA;82/219 - Ework Group, last date: 2025-08-22&#xD;&#xA;83/219 - Fagerhult Group, last date: 2025-08-22&#xD;&#xA;84/219 - Fasadgruppen, last date: 2025-08-22&#xD;&#xA;85/219 - Fenix Outdoor B, last date: 2025-08-22&#xD;&#xA;86/219 - Ferronordic, last date: 2025-08-22&#xD;&#xA;87/219 - Flerie, last date: 2025-08-22&#xD;&#xA;88/219 - FM Mattsson B, last date: 2025-08-22&#xD;&#xA;89/219 - Formpipe Software, last date: 2025-08-22&#xD;&#xA;90/219 - Fortnox, last date: no days&#xD;&#xA;91/219 - G5 Entertainment, last date: 2025-08-22&#xD;&#xA;92/219 - Garo, last date: 2025-08-22&#xD;&#xA;93/219 - Gentoo Media, last date: 2025-08-22&#xD;&#xA;94/219 - Getinge B, last date: 2025-08-22&#xD;&#xA;95/219 - Green Landscaping Group, last date: 2025-08-22&#xD;&#xA;96/219 - Gr&#xE4;nges, last date: 2025-08-22&#xD;&#xA;97/219 - H&amp;M B, last date: 2025-08-22&#xD;&#xA;98/219 - HAKI Safety B, last date: 2025-08-22&#xD;&#xA;99/219 - Hansa Biopharma, last date: 2025-08-22&#xD;&#xA;100/219 - HANZA, last date: 2025-08-22&#xD;&#xA;101/219 - Hemnet Group, last date: 2025-08-22&#xD;&#xA;102/219 - Hexagon B, last date: 2025-08-22&#xD;&#xA;103/219 - Hexatronic Group, last date: 2025-08-22&#xD;&#xA;104/219 - Hexpol B, last date: 2025-08-22&#xD;&#xA;105/219 - HMS Networks, last date: 2025-08-22&#xD;&#xA;106/219 - Holmen B, last date: 2025-08-22&#xD;&#xA;107/219 - Humana, last date: 2025-08-22&#xD;&#xA;108/219 - Humble Group, last date: 2025-08-22&#xD;&#xA;109/219 - Husqvarna B, last date: 2025-08-22&#xD;&#xA;110/219 - I.A.R Systems Group B, last date: 2025-08-22&#xD;&#xA;111/219 - Indutrade, last date: 2025-08-22&#xD;&#xA;112/219 - Infant Bacterial Therapeutics B, last date: 2025-08-22&#xD;&#xA;113/219 - Instalco, last date: 2025-08-22&#xD;&#xA;114/219 - International Petroleum Corp., last date: 2025-08-22&#xD;&#xA;115/219 - INVISIO, last date: 2025-08-22&#xD;&#xA;116/219 - Inwido, last date: 2025-08-22&#xD;&#xA;117/219 - ITAB Shop Concept, last date: 2025-08-22&#xD;&#xA;118/219 - KABE Group B, last date: 2025-08-22&#xD;&#xA;119/219 - Karnov Group, last date: 2025-08-22&#xD;&#xA;120/219 - Knowit, last date: 2025-08-22&#xD;&#xA;121/219 - Lagercrantz Group B, last date: 2025-08-22&#xD;&#xA;122/219 - Lifco B, last date: 2025-08-22&#xD;&#xA;123/219 - Lime Technologies, last date: 2025-08-22&#xD;&#xA;124/219 - Loomis, last date: 2025-08-22&#xD;&#xA;125/219 - Lucara Diamond Corp, last date: 2025-08-22&#xD;&#xA;126/219 - Lundin Gold, last date: 2025-08-22&#xD;&#xA;127/219 - Lundin Mining Corporation, last date: 2025-08-22&#xD;&#xA;128/219 - Maha Energy A, last date: 2025-08-22&#xD;&#xA;129/219 - Medicover B, last date: 2025-08-22&#xD;&#xA;130/219 - MEKO, last date: 2025-08-22&#xD;&#xA;131/219 - Micro Systemation B, last date: 2025-08-22&#xD;&#xA;132/219 - Midsona B, last date: 2025-08-22&#xD;&#xA;133/219 - MilDef Group, last date: 2025-08-22&#xD;&#xA;134/219 - Millicom International Cellular SDB, last date: no days&#xD;&#xA;135/219 - Mips, last date: 2025-08-22&#xD;&#xA;136/219 - Moberg Pharma, last date: 2025-08-22&#xD;&#xA;137/219 - Momentum Group B, last date: 2025-08-22&#xD;&#xA;138/219 - MTG B, last date: 2025-08-22&#xD;&#xA;139/219 - Munters Group AB, last date: 2025-08-22&#xD;&#xA;140/219 - Mycronic, last date: 2025-08-22&#xD;&#xA;141/219 - NCC B, last date: 2025-08-22&#xD;&#xA;142/219 - Nederman Holding, last date: 2025-08-22&#xD;&#xA;143/219 - Nelly Group, last date: 2025-08-22&#xD;&#xA;144/219 - Net Insight B, last date: 2025-08-22&#xD;&#xA;145/219 - Netel, last date: 2025-08-22&#xD;&#xA;146/219 - New Wave B, last date: 2025-08-22&#xD;&#xA;147/219 - Nil&#xF6;rngruppen B, last date: 2025-08-22&#xD;&#xA;148/219 - Nobia, last date: 2025-08-22&#xD;&#xA;149/219 - Nolato B, last date: 2025-08-22&#xD;&#xA;150/219 - Nordic Paper Holding AB, last date: 2025-08-22&#xD;&#xA;151/219 - Nordic Waterproofing Holding, last date: no days&#xD;&#xA;152/219 - Nordisk Bergteknik, last date: 2025-08-22&#xD;&#xA;153/219 - Norva24, last date: no days&#xD;&#xA;154/219 - Note, last date: 2025-08-22&#xD;&#xA;155/219 - Novotek B, last date: 2025-08-22&#xD;&#xA;156/219 - Orr&#xF6;n Energy, last date: 2025-08-22&#xD;&#xA;157/219 - Ovzon, last date: 2025-08-22&#xD;&#xA;158/219 - Peab B, last date: 2025-08-22&#xD;&#xA;159/219 - Pierce Group, last date: 2025-08-22&#xD;&#xA;160/219 - PowerCell Sweden, last date: 2025-08-22&#xD;&#xA;161/219 - Prevas B, last date: 2025-08-22&#xD;&#xA;162/219 - Pricer B, last date: 2025-08-22&#xD;&#xA;163/219 - Proact IT Group, last date: 2025-08-22&#xD;&#xA;164/219 - Probi, last date: no days&#xD;&#xA;165/219 - ProfilGruppen B, last date: 2025-08-22&#xD;&#xA;166/219 - Profoto Holding, last date: 2025-08-22&#xD;&#xA;167/219 - Railcare Group, last date: 2025-08-22&#xD;&#xA;168/219 - RaySearch Laboratories B, last date: 2025-08-22&#xD;&#xA;169/219 - Rejlers B, last date: 2025-08-22&#xD;&#xA;170/219 - Rottneros, last date: 2025-08-22&#xD;&#xA;171/219 - Rusta, last date: 2025-08-22&#xD;&#xA;172/219 - SAAB B, last date: 2025-08-22&#xD;&#xA;173/219 - Sandvik, last date: 2025-08-22&#xD;&#xA;174/219 - Saniona, last date: 2025-08-22&#xD;&#xA;175/219 - SCA B, last date: 2025-08-22&#xD;&#xA;176/219 - Scandi Standard, last date: 2025-08-22&#xD;&#xA;177/219 - Sdiptech B, last date: 2025-08-22&#xD;&#xA;178/219 - Sectra B, last date: 2025-08-22&#xD;&#xA;179/219 - Securitas B, last date: 2025-08-22&#xD;&#xA;180/219 - Sedana Medical, last date: 2025-08-22&#xD;&#xA;181/219 - Sensys Gatso Group, last date: 2025-08-22&#xD;&#xA;182/219 - Senzime, last date: 2025-08-22&#xD;&#xA;183/219 - Sinch, last date: 2025-08-22&#xD;&#xA;184/219 - Sintercast, last date: 2025-08-22&#xD;&#xA;185/219 - Sivers Semiconductors, last date: 2025-08-22&#xD;&#xA;186/219 - Skanska B, last date: 2025-08-22&#xD;&#xA;187/219 - SKF B, last date: 2025-08-22&#xD;&#xA;188/219 - SkiStar B, last date: 2025-08-22&#xD;&#xA;189/219 - Sleep Cycle, last date: 2025-08-22&#xD;&#xA;190/219 - Softronic B, last date: 2025-08-22&#xD;&#xA;191/219 - SSAB A, last date: 2025-08-22&#xD;&#xA;192/219 - Stillfront Group, last date: 2025-08-22&#xD;&#xA;193/219 - Stora Enso A, last date: 2025-08-22&#xD;&#xA;194/219 - Studsvik, last date: 2025-08-22&#xD;&#xA;195/219 - Svedbergs Group B, last date: 2025-08-22&#xD;&#xA;196/219 - Sweco B, last date: 2025-08-22&#xD;&#xA;197/219 - Swedish Orphan Biovitrum, last date: 2025-08-22&#xD;&#xA;198/219 - Synsam, last date: 2025-08-22&#xD;&#xA;199/219 - Systemair, last date: 2025-08-22&#xD;&#xA;200/219 - Tele2 B, last date: 2025-08-22&#xD;&#xA;201/219 - Telia Company, last date: 2025-08-22&#xD;&#xA;202/219 - Tethys Oil, last date: no days&#xD;&#xA;203/219 - Tietoevry, last date: 2025-08-22&#xD;&#xA;204/219 - Transtema Group, last date: 2025-08-22&#xD;&#xA;205/219 - TRATON SE, last date: 2025-08-22&#xD;&#xA;206/219 - Trelleborg B, last date: 2025-08-22&#xD;&#xA;207/219 - Troax Group, last date: 2025-08-22&#xD;&#xA;208/219 - Truecaller, last date: 2025-08-22&#xD;&#xA;209/219 - Viaplay Group B, last date: 2025-08-22&#xD;&#xA;210/219 - Vicore Pharma Holding, last date: 2025-08-22&#xD;&#xA;211/219 - Viscaria, last date: 2025-08-22&#xD;&#xA;212/219 - Vitec Software Group B, last date: 2025-08-22&#xD;&#xA;213/219 - Vitrolife, last date: 2025-08-22&#xD;&#xA;214/219 - Volati, last date: 2025-08-22&#xD;&#xA;215/219 - Volvo B, last date: 2025-08-22&#xD;&#xA;216/219 - Wall to Wall Group A, last date: 2025-08-22&#xD;&#xA;217/219 - XANO Industri B, last date: 2025-08-22&#xD;&#xA;218/219 - Xspray Pharma, last date: 2025-08-22&#xD;&#xA;219/219 - Xvivo Perfusion, last date: 2025-08-22</pre></details></li>
+    <li><details><summary>2025-08-24 20:13:41 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:13:41 - Running StockService.RefreshSwedishManual</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:13:31 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:13:18 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:13:03 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:06:16 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-24 20:05:54 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 16:11:50 - Executing StockService.RefreshSymbolDays - refreshSwedish: False, refreshUS: True</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 16:11:37 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 16:11:20 - Executing StockService.RefreshSymbolDays - refreshSwedish: False, refreshUS: True</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 16:11:19 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 15:39:40 - Starting DayTradeService</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 15:36:47 - Starting DayTradeService</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 15:08:10 - Starting DayTradeService</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 08:04:35 - Market closed. Sleeping until 2025-08-22 08:45:00 CET.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-22 08:04:35 - Starting DayTradeService</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-21 19:15:41 - DayTradeService</summary><pre>Market closed. Sleeping until 2025-08-22 08:45:00 CET.</pre></details></li>
+    <li><details><summary>2025-08-21 19:15:41 - DayTradeService</summary><pre>Starting DayTradeService</pre></details></li>
+    <li><details><summary>2025-08-21 18:48:02 - DayTradeService</summary><pre>Market closed. Sleeping until 2025-08-22 08:45:00 CET.</pre></details></li>
+    <li><details><summary>2025-08-21 18:48:02 - DayTradeService</summary><pre>Starting DayTradeService</pre></details></li>
+    <li><details><summary>2025-08-21 18:47:03 - Executing StockService.RefreshSymbolDays - refreshSwedish: True, refreshUS: False</summary><pre>&#xD;&#xA;Number of Swedish to refresh: 219&#xD;&#xA;1/219 - AAK, last date: 2025-08-21&#xD;&#xA;2/219 - ABB, last date: 2025-08-21&#xD;&#xA;3/219 - AcadeMedia, last date: 2025-08-21&#xD;&#xA;4/219 - AddLife B, last date: 2025-08-21&#xD;&#xA;5/219 - Addnode Group B, last date: 2025-08-21&#xD;&#xA;6/219 - Addtech B, last date: 2025-08-21&#xD;&#xA;7/219 - Africa Oil Corp., last date: 2025-08-21&#xD;&#xA;8/219 - AFRY, last date: 2025-08-21&#xD;&#xA;9/219 - Alfa Laval, last date: 2025-08-21&#xD;&#xA;10/219 - Alimak Group, last date: 2025-08-21&#xD;&#xA;11/219 - Alleima, last date: 2025-08-21&#xD;&#xA;12/219 - Alligo B, last date: 2025-08-21&#xD;&#xA;13/219 - Ambea, last date: 2025-08-21&#xD;&#xA;14/219 - AQ Group, last date: 2025-08-21&#xD;&#xA;15/219 - Arctic Paper, last date: 2025-08-21&#xD;&#xA;16/219 - Arise, last date: 2025-08-21&#xD;&#xA;17/219 - Arjo, last date: 2025-08-21&#xD;&#xA;18/219 - Arla Plast, last date: 2025-08-21&#xD;&#xA;19/219 - Assa Abloy B, last date: 2025-08-21&#xD;&#xA;20/219 - AstraZeneca, last date: 2025-08-21&#xD;&#xA;21/219 - Atlas Copco B, last date: 2025-08-21&#xD;&#xA;22/219 - Attendo, last date: 2025-08-21&#xD;&#xA;23/219 - Autoliv SDB, last date: 2025-08-21&#xD;&#xA;24/219 - Axfood, last date: 2025-08-21&#xD;&#xA;25/219 - B3 Consulting Group, last date: 2025-08-21&#xD;&#xA;26/219 - Bactiguard Holding B, last date: 2025-08-21&#xD;&#xA;27/219 - Balco Group, last date: 2025-08-21&#xD;&#xA;28/219 - Beijer Alma B, last date: 2025-08-21&#xD;&#xA;29/219 - Beijer Ref B, last date: 2025-08-21&#xD;&#xA;30/219 - Bergman &amp; Beving B, last date: 2025-08-21&#xD;&#xA;31/219 - Berner Industrier B, last date: 2025-08-21&#xD;&#xA;32/219 - Betsson B, last date: 2025-08-21&#xD;&#xA;33/219 - Better Collective, last date: 2025-08-21&#xD;&#xA;34/219 - BICO Group, last date: 2025-08-21&#xD;&#xA;35/219 - Bilia A, last date: 2025-08-21&#xD;&#xA;36/219 - Billerud, last date: 2025-08-21&#xD;&#xA;37/219 - BioArctic B, last date: 2025-08-21&#xD;&#xA;38/219 - BioGaia B, last date: 2025-08-21&#xD;&#xA;39/219 - BioInvent International, last date: 2025-08-21&#xD;&#xA;40/219 - Biotage, last date: no days&#xD;&#xA;41/219 - Bj&#xF6;rn Borg, last date: 2025-08-21&#xD;&#xA;42/219 - Boliden, last date: 2025-08-21&#xD;&#xA;43/219 - BONESUPPORT, last date: 2025-08-21&#xD;&#xA;44/219 - Boozt, last date: 2025-08-21&#xD;&#xA;45/219 - Bufab, last date: 2025-08-21&#xD;&#xA;46/219 - Bulten, last date: 2025-08-21&#xD;&#xA;47/219 - Byggmax Group, last date: 2025-08-21&#xD;&#xA;48/219 - C-RAD B, last date: 2025-08-21&#xD;&#xA;49/219 - Camurus, last date: 2025-08-21&#xD;&#xA;50/219 - Cavotec SA, last date: no days&#xD;&#xA;51/219 - CellaVision, last date: 2025-08-21&#xD;&#xA;52/219 - Cinclus Pharma, last date: 2025-08-21&#xD;&#xA;53/219 - Cint Group, last date: 2025-08-21&#xD;&#xA;54/219 - Clas Ohlson B, last date: 2025-08-21&#xD;&#xA;55/219 - Cloetta, last date: 2025-08-21&#xD;&#xA;56/219 - CTEK, last date: 2025-08-21&#xD;&#xA;57/219 - CTT Systems, last date: 2025-08-21&#xD;&#xA;58/219 - Dedicare B, last date: 2025-08-21&#xD;&#xA;59/219 - Dometic Group, last date: 2025-08-21&#xD;&#xA;60/219 - Doro, last date: 2025-08-21&#xD;&#xA;61/219 - Duni, last date: 2025-08-21&#xD;&#xA;62/219 - Duroc B, last date: 2025-08-21&#xD;&#xA;63/219 - Dustin Group, last date: 2025-08-21&#xD;&#xA;64/219 - Dynavox Group, last date: 2025-08-21&#xD;&#xA;65/219 - Egetis Therapeutics, last date: 2025-08-21&#xD;&#xA;66/219 - Elanders B, last date: 2025-08-21&#xD;&#xA;67/219 - Electrolux B, last date: 2025-08-21&#xD;&#xA;68/219 - Electrolux Professional B, last date: 2025-08-21&#xD;&#xA;69/219 - Elekta B, last date: 2025-08-21&#xD;&#xA;70/219 - Eltel, last date: 2025-08-21&#xD;&#xA;71/219 - Embracer Group B, last date: 2025-08-21&#xD;&#xA;72/219 - Enad Global 7, last date: 2025-08-21&#xD;&#xA;73/219 - Enea, last date: 2025-08-21&#xD;&#xA;74/219 - engcon B, last date: 2025-08-21&#xD;&#xA;75/219 - Eolus Vind B, last date: 2025-08-21&#xD;&#xA;76/219 - Ependion, last date: 2025-08-21&#xD;&#xA;77/219 - Epiroc B, last date: 2025-08-21&#xD;&#xA;78/219 - EQL Pharma, last date: 2025-08-21&#xD;&#xA;79/219 - Ericsson B, last date: 2025-08-21&#xD;&#xA;80/219 - Essity B, last date: 2025-08-21&#xD;&#xA;81/219 - Evolution, last date: 2025-08-21&#xD;&#xA;82/219 - Ework Group, last date: 2025-08-21&#xD;&#xA;83/219 - Fagerhult Group, last date: 2025-08-21&#xD;&#xA;84/219 - Fasadgruppen, last date: 2025-08-21&#xD;&#xA;85/219 - Fenix Outdoor B, last date: 2025-08-21&#xD;&#xA;86/219 - Ferronordic, last date: 2025-08-21&#xD;&#xA;87/219 - Flerie, last date: 2025-08-21&#xD;&#xA;88/219 - FM Mattsson B, last date: 2025-08-21&#xD;&#xA;89/219 - Formpipe Software, last date: 2025-08-21&#xD;&#xA;90/219 - Fortnox, last date: no days&#xD;&#xA;91/219 - G5 Entertainment, last date: 2025-08-21&#xD;&#xA;92/219 - Garo, last date: 2025-08-21&#xD;&#xA;93/219 - Gentoo Media, last date: 2025-08-21&#xD;&#xA;94/219 - Getinge B, last date: 2025-08-21&#xD;&#xA;95/219 - Green Landscaping Group, last date: 2025-08-21&#xD;&#xA;96/219 - Gr&#xE4;nges, last date: 2025-08-21&#xD;&#xA;97/219 - H&amp;M B, last date: 2025-08-21&#xD;&#xA;98/219 - HAKI Safety B, last date: 2025-08-21&#xD;&#xA;99/219 - Hansa Biopharma, last date: 2025-08-21&#xD;&#xA;100/219 - HANZA, last date: 2025-08-21&#xD;&#xA;101/219 - Hemnet Group, last date: 2025-08-21&#xD;&#xA;102/219 - Hexagon B, last date: 2025-08-21&#xD;&#xA;103/219 - Hexatronic Group, last date: 2025-08-21&#xD;&#xA;104/219 - Hexpol B, last date: 2025-08-21&#xD;&#xA;105/219 - HMS Networks, last date: 2025-08-21&#xD;&#xA;106/219 - Holmen B, last date: 2025-08-21&#xD;&#xA;107/219 - Humana, last date: 2025-08-21&#xD;&#xA;108/219 - Humble Group, last date: 2025-08-21&#xD;&#xA;109/219 - Husqvarna B, last date: 2025-08-21&#xD;&#xA;110/219 - I.A.R Systems Group B, last date: 2025-08-21&#xD;&#xA;111/219 - Indutrade, last date: 2025-08-21&#xD;&#xA;112/219 - Infant Bacterial Therapeutics B, last date: 2025-08-21&#xD;&#xA;113/219 - Instalco, last date: 2025-08-21&#xD;&#xA;114/219 - International Petroleum Corp., last date: 2025-08-21&#xD;&#xA;115/219 - INVISIO, last date: 2025-08-21&#xD;&#xA;116/219 - Inwido, last date: 2025-08-21&#xD;&#xA;117/219 - ITAB Shop Concept, last date: 2025-08-21&#xD;&#xA;118/219 - KABE Group B, last date: 2025-08-21&#xD;&#xA;119/219 - Karnov Group, last date: 2025-08-21&#xD;&#xA;120/219 - Knowit, last date: 2025-08-21&#xD;&#xA;121/219 - Lagercrantz Group B, last date: 2025-08-21&#xD;&#xA;122/219 - Lifco B, last date: 2025-08-21&#xD;&#xA;123/219 - Lime Technologies, last date: 2025-08-21&#xD;&#xA;124/219 - Loomis, last date: 2025-08-21&#xD;&#xA;125/219 - Lucara Diamond Corp, last date: 2025-08-21&#xD;&#xA;126/219 - Lundin Gold, last date: 2025-08-21&#xD;&#xA;127/219 - Lundin Mining Corporation, last date: 2025-08-21&#xD;&#xA;128/219 - Maha Energy A, last date: 2025-08-21&#xD;&#xA;129/219 - Medicover B, last date: 2025-08-21&#xD;&#xA;130/219 - MEKO, last date: 2025-08-21&#xD;&#xA;131/219 - Micro Systemation B, last date: 2025-08-21&#xD;&#xA;132/219 - Midsona B, last date: 2025-08-21&#xD;&#xA;133/219 - MilDef Group, last date: 2025-08-21&#xD;&#xA;134/219 - Millicom International Cellular SDB, last date: no days&#xD;&#xA;135/219 - Mips, last date: 2025-08-21&#xD;&#xA;136/219 - Moberg Pharma, last date: 2025-08-21&#xD;&#xA;137/219 - Momentum Group B, last date: 2025-08-21&#xD;&#xA;138/219 - MTG B, last date: 2025-08-21&#xD;&#xA;139/219 - Munters Group AB, last date: 2025-08-21&#xD;&#xA;140/219 - Mycronic, last date: 2025-08-21&#xD;&#xA;141/219 - NCC B, last date: 2025-08-21&#xD;&#xA;142/219 - Nederman Holding, last date: 2025-08-21&#xD;&#xA;143/219 - Nelly Group, last date: 2025-08-21&#xD;&#xA;144/219 - Net Insight B, last date: 2025-08-21&#xD;&#xA;145/219 - Netel, last date: 2025-08-21&#xD;&#xA;146/219 - New Wave B, last date: 2025-08-21&#xD;&#xA;147/219 - Nil&#xF6;rngruppen B, last date: 2025-08-21&#xD;&#xA;148/219 - Nobia, last date: 2025-08-21&#xD;&#xA;149/219 - Nolato B, last date: 2025-08-21&#xD;&#xA;150/219 - Nordic Paper Holding AB, last date: 2025-08-21&#xD;&#xA;151/219 - Nordic Waterproofing Holding, last date: no days&#xD;&#xA;152/219 - Nordisk Bergteknik, last date: 2025-08-21&#xD;&#xA;153/219 - Norva24, last date: no days&#xD;&#xA;154/219 - Note, last date: 2025-08-21&#xD;&#xA;155/219 - Novotek B, last date: 2025-08-21&#xD;&#xA;156/219 - Orr&#xF6;n Energy, last date: 2025-08-21&#xD;&#xA;157/219 - Ovzon, last date: 2025-08-21&#xD;&#xA;158/219 - Peab B, last date: 2025-08-21&#xD;&#xA;159/219 - Pierce Group, last date: 2025-08-21&#xD;&#xA;160/219 - PowerCell Sweden, last date: 2025-08-21&#xD;&#xA;161/219 - Prevas B, last date: 2025-08-21&#xD;&#xA;162/219 - Pricer B, last date: 2025-08-21&#xD;&#xA;163/219 - Proact IT Group, last date: 2025-08-21&#xD;&#xA;164/219 - Probi, last date: no days&#xD;&#xA;165/219 - ProfilGruppen B, last date: 2025-08-21&#xD;&#xA;166/219 - Profoto Holding, last date: 2025-08-21&#xD;&#xA;167/219 - Railcare Group, last date: 2025-08-21&#xD;&#xA;168/219 - RaySearch Laboratories B, last date: 2025-08-21&#xD;&#xA;169/219 - Rejlers B, last date: 2025-08-21&#xD;&#xA;170/219 - Rottneros, last date: 2025-08-21&#xD;&#xA;171/219 - Rusta, last date: 2025-08-21&#xD;&#xA;172/219 - SAAB B, last date: 2025-08-21&#xD;&#xA;173/219 - Sandvik, last date: 2025-08-21&#xD;&#xA;174/219 - Saniona, last date: 2025-08-21&#xD;&#xA;175/219 - SCA B, last date: 2025-08-21&#xD;&#xA;176/219 - Scandi Standard, last date: 2025-08-21&#xD;&#xA;177/219 - Sdiptech B, last date: 2025-08-21&#xD;&#xA;178/219 - Sectra B, last date: 2025-08-21&#xD;&#xA;179/219 - Securitas B, last date: 2025-08-21&#xD;&#xA;180/219 - Sedana Medical, last date: 2025-08-21&#xD;&#xA;181/219 - Sensys Gatso Group, last date: 2025-08-21&#xD;&#xA;182/219 - Senzime, last date: 2025-08-21&#xD;&#xA;183/219 - Sinch, last date: 2025-08-21&#xD;&#xA;184/219 - Sintercast, last date: 2025-08-21&#xD;&#xA;185/219 - Sivers Semiconductors, last date: 2025-08-21&#xD;&#xA;186/219 - Skanska B, last date: 2025-08-21&#xD;&#xA;187/219 - SKF B, last date: 2025-08-21&#xD;&#xA;188/219 - SkiStar B, last date: 2025-08-21&#xD;&#xA;189/219 - Sleep Cycle, last date: 2025-08-21&#xD;&#xA;190/219 - Softronic B, last date: 2025-08-21&#xD;&#xA;191/219 - SSAB A, last date: 2025-08-21&#xD;&#xA;192/219 - Stillfront Group, last date: 2025-08-21&#xD;&#xA;193/219 - Stora Enso A, last date: 2025-08-21&#xD;&#xA;194/219 - Studsvik, last date: 2025-08-21&#xD;&#xA;195/219 - Svedbergs Group B, last date: 2025-08-21&#xD;&#xA;196/219 - Sweco B, last date: 2025-08-21&#xD;&#xA;197/219 - Swedish Orphan Biovitrum, last date: 2025-08-21&#xD;&#xA;198/219 - Synsam, last date: 2025-08-21&#xD;&#xA;199/219 - Systemair, last date: 2025-08-21&#xD;&#xA;200/219 - Tele2 B, last date: 2025-08-21&#xD;&#xA;201/219 - Telia Company, last date: 2025-08-21&#xD;&#xA;202/219 - Tethys Oil, last date: no days&#xD;&#xA;203/219 - Tietoevry, last date: 2025-08-21&#xD;&#xA;204/219 - Transtema Group, last date: 2025-08-21&#xD;&#xA;205/219 - TRATON SE, last date: 2025-08-21&#xD;&#xA;206/219 - Trelleborg B, last date: 2025-08-21&#xD;&#xA;207/219 - Troax Group, last date: 2025-08-21&#xD;&#xA;208/219 - Truecaller, last date: 2025-08-21&#xD;&#xA;209/219 - Viaplay Group B, last date: 2025-08-21&#xD;&#xA;210/219 - Vicore Pharma Holding, last date: 2025-08-21&#xD;&#xA;211/219 - Viscaria, last date: 2025-08-21&#xD;&#xA;212/219 - Vitec Software Group B, last date: 2025-08-21&#xD;&#xA;213/219 - Vitrolife, last date: 2025-08-21&#xD;&#xA;214/219 - Volati, last date: 2025-08-21&#xD;&#xA;215/219 - Volvo B, last date: 2025-08-21&#xD;&#xA;216/219 - Wall to Wall Group A, last date: 2025-08-21&#xD;&#xA;217/219 - XANO Industri B, last date: 2025-08-21&#xD;&#xA;218/219 - Xspray Pharma, last date: 2025-08-21&#xD;&#xA;219/219 - Xvivo Perfusion, last date: 2025-08-21</pre></details></li>
+    <li><details><summary>2025-08-21 18:47:01 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-21 18:44:30 - Executing StockService.RefreshSymbolDays - refreshSwedish: True, refreshUS: False</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-21 18:44:20 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-21 18:42:08 - Executing StockService.RefreshSymbolDays - refreshSwedish: True, refreshUS: False</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-21 18:41:40 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-21 18:41:37 - Running StockService.RefreshSwedishEarly</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 19:37:43 - DayTradeService</summary><pre>Market closed. Sleeping until 2025-08-21 08:45:00 CET.</pre></details></li>
+    <li><details><summary>2025-08-20 19:37:43 - DayTradeService</summary><pre>Starting DayTradeService</pre></details></li>
+    <li><details><summary>2025-08-20 18:52:21 - DayTradeService</summary><pre>Starting DayTradeService</pre></details></li>
+    <li><details><summary>2025-08-20 18:28:21 - Executing StockService.RefreshSymbolDays - refreshSwedish: True, refreshUS: False</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 18:26:47 - Executing StockService.SetCurrentTops</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 18:26:43 - Running StockService.RefreshSwedishEarly</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 15:52:47 - TESTING.TESTING</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 15:33:20 - Checking pensionsbygget - 0 new mails to send</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 15:13:19 - Checking pensionsbygget - 0 new mails to send</summary><pre>no extra information</pre></details></li>
+    <li><details><summary>2025-08-20 14:53:19 - Checking pensionsbygget - 0 new mails to send</summary><pre>no extra information</pre></details></li>
+  </ul>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerToggle = document.getElementById('hamburger-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const body = document.body;
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    overlay.id = 'nav-overlay';
+    body.appendChild(overlay);
+    
+    function toggleMenu() {
+        const isOpen = navMenu.classList.contains('open');
+        
+        if (isOpen) {
+            navMenu.classList.remove('open');
+            hamburgerToggle.classList.remove('open');
+            overlay.classList.remove('open');
+        } else {
+            navMenu.classList.add('open');
+            hamburgerToggle.classList.add('open');
+            overlay.classList.add('open');
+        }
+    }
+    
+    // Make toggleMenu globally available for encrypted version
+    window.toggleMenu = toggleMenu;
+    
+    hamburgerToggle.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+    
+    // Close menu when clicking nav links (except buttons)
+    navMenu.addEventListener('click', function(e) {
+        if (e.target.classList.contains('nav-link')) {
+            toggleMenu();
+        }
+    });
+    
+    // Handle keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navMenu.classList.contains('open')) {
+            toggleMenu();
+        }
+    });
+});
+
+// Utility function for API calls (if not already defined elsewhere)
+if (typeof callEndpoint === 'undefined') {
+    function callEndpoint(endpoint) {
+        fetch(endpoint)
+            .then(response => {
+                if (response.ok) {
+                    console.log('Endpoint called successfully:', endpoint);
+                    // You could add a notification or feedback here
+                } else {
+                    console.error('Failed to call endpoint:', endpoint);
+                }
+            })
+            .catch(error => {
+                console.error('Error calling endpoint:', endpoint, error);
+            });
+    }
+}
+</script>
+</body>
+</html>
