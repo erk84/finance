@@ -270,13 +270,19 @@ body {
 </nav>
 <div class='content'>
   <h1>Recent errors:</h1>
-  <div class='meta'>Antal poster: 1  </div>
+  <div class='meta'>Antal poster: 2  </div>
   <ul>
+    <li><details><summary>2025-09-10 10:23:45 - Error executing EmailHelper.SendGMAILMailAsync</summary><pre>Message:&#xD;&#xA;Failure sending mail. &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;StackTrace:&#xD;&#xA;   at NotifierDockerService.Helpers.EmailHelper.SendGMAILMailAsync(String subject, String content, Boolean actions, String fromText) in C:\Users\Erik\OneDrive - Viati Konsult AB\pi-stock\NotifierDockerService\Helpers\EmailHelper.cs:line 92</pre></details></li>
     <li><details><summary>2025-09-09 16:34:42 - Error executing BorslabbetService.RefreshSammansattMomentum</summary><pre>Message:&#xD;&#xA;Nullable object must have a value. &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;StackTrace:&#xD;&#xA;   at System.Nullable`1.get_Value()&#xD;&#xA;   at NotifierDockerService.Services.Borslabbet.BorslabbetService.&lt;&gt;c__DisplayClass6_1.&lt;RefreshSammansattMomentum&gt;b__7(FilteredResult x) in C:\Users\Erik\OneDrive - Viati Konsult AB\pi-stock\NotifierDockerService\Services\BorslabbetService\BorslabbetService.cs:line 141&#xD;&#xA;   at System.Linq.Enumerable.SelectListIterator`2.Fill(ReadOnlySpan`1 source, Span`1 destination, Func`2 func)&#xD;&#xA;   at System.Linq.Enumerable.SelectListIterator`2.ToArray()&#xD;&#xA;   at System.Linq.Buffer`1..ctor(IEnumerable`1 source)&#xD;&#xA;   at System.Linq.OrderedEnumerable`1.ToList(Int32 minIdx, Int32 maxIdx)&#xD;&#xA;   at NotifierDockerService.Services.Borslabbet.BorslabbetService.RefreshSammansattMomentum() in C:\Users\Erik\OneDrive - Viati Konsult AB\pi-stock\NotifierDockerService\Services\BorslabbetService\BorslabbetService.cs:line 139</pre></details></li>
   </ul>
   <h1>All logs:</h1>
-  <div class='meta'>Antal poster: 140  </div>
+  <div class='meta'>Antal poster: 145  </div>
   <ul>
+    <li><details><summary style='background: red;'>2025-09-10 10:23:45 - Error executing EmailHelper.SendGMAILMailAsync</summary><pre>Message:&#xD;&#xA;Failure sending mail. &#xD;&#xA;&#xD;&#xA;&#xD;&#xA;StackTrace:&#xD;&#xA;   at NotifierDockerService.Helpers.EmailHelper.SendGMAILMailAsync(String subject, String content, Boolean actions, String fromText) in C:\Users\Erik\OneDrive - Viati Konsult AB\pi-stock\NotifierDockerService\Helpers\EmailHelper.cs:line 92</pre></details></li>
+    <li><details><summary style=''>2025-09-10 10:23:14 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary style=''>2025-09-10 10:23:06 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
+    <li><details><summary style=''>2025-09-10 10:20:21 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
+    <li><details><summary style=''>2025-09-10 10:18:31 - Dashboard successfully uploaded to GitHub</summary><pre>no extra information</pre></details></li>
     <li><details><summary style=''>2025-09-10 10:18:11 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
     <li><details><summary style=''>2025-09-10 10:15:41 - DayTradeService not enabled, closing down.</summary><pre>no extra information</pre></details></li>
     <li><details><summary style=''>2025-09-10 10:06:34 - NewsDashboardLogic - serious error, NO DOW DAYS - US MARKET CAN&#x27;T BE UPDATED!</summary><pre>no extra information</pre></details></li>
