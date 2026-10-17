@@ -1,0 +1,22 @@
+
+				{
+					"name": "Market Screener",
+					"short_name": "Screener",
+					"id": "/screener",
+					"start_url": "/screener",
+					"display": "standalone",
+					"background_color": "#0a0a0a",
+					"theme_color": "#0a0a0a",
+					"icons": [
+						{
+							"src": "images/piggy192.png",
+							"sizes": "192x192",
+							"type": "image/png"
+						},
+						{
+							"src": "images/piggy512.png",
+							"sizes": "512x512",
+							"type": "image/png"
+						}
+					]
+				}
